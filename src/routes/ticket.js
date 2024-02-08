@@ -1,33 +1,33 @@
-const { LoginHandler, SignupHandler } = require("../controllers/TicketController");
+const { addNewTicket, viewTicket, editTicket, deleteTicket } = require("../controllers/TicketController");
 
 module.exports = (fastify) => {
-	fastify.post("/ticket", async (request, reply) => {
+	fastify.post("/api/ticket", async (request, reply) => {
 		try {
-			await LoginHandler(request, reply, fastify);
+			await addNewTicket(request, reply, fastify);
 		} catch (error) {
 			console.error(error);
 			reply.code(500).send({ message: "Internal Server Error ..." });
 		}
 	});
-	fastify.put("/ticket/:id", async (request, reply) => {
+	fastify.put("/api/ticket/:id", async (request, reply) => {
 		try {
-			await SignupHandler(request, reply, fastify);
+			await editTicket(request, reply, fastify);
 		} catch (error) {
 			console.error(error);
 			reply.code(500).send({ message: "Internal Server Error ..." });
 		}
 	});
-    fastify.delete("/ticket/:id", async (request, reply) => {
+    fastify.delete("/api/ticket/:id", async (request, reply) => {
 		try {
-			await SignupHandler(request, reply, fastify);
+			await deleteTicket(request, reply, fastify);
 		} catch (error) {
 			console.error(error);
 			reply.code(500).send({ message: "Internal Server Error ..." });
 		}
 	});
-    fastify.get("/ticket/:id", async (request, reply) => {
+    fastify.get("/api/ticket/:id", async (request, reply) => {
 		try {
-			await SignupHandler(request, reply, fastify);
+			await viewTicket(request, reply, fastify);
 		} catch (error) {
 			console.error(error);
 			reply.code(500).send({ message: "Internal Server Error ..." });

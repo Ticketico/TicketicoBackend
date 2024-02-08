@@ -1,7 +1,7 @@
 const { EditUser } = require("../controllers/UserController");
 
 module.exports = (fastify) => {
-	fastify.put("/user", async (request, reply) => {
+	fastify.put("/api/user", async (request, reply) => {
 		try {
 			await EditUser(request, reply, fastify);
 		} catch (error) {

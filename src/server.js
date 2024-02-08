@@ -4,6 +4,7 @@ const fastify = require("fastify")({ logger: true });
 
 require("./plugins/postgres")(fastify)
 	.then(() => {
+		require("./plugins/cors")(fastify);
 		require("./routes/auth")(fastify);
 		require("./routes/user")(fastify);
 		require("./routes/product")(fastify);
