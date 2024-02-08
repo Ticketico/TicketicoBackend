@@ -1,41 +1,19 @@
-const {
-	addNewProduct,
-	viewProduct,
-	editProduct,
-	deleteProduct,
-} = require("../controllers/ProductController");
+const addNewProduct = require("../controllers/ProductControllers/CreateProductController");
+const viewProduct = require("../controllers/ProductControllers/GetProductController");
+const editProduct = require("../controllers/ProductControllers/editProductController");
+const deleteProduct = require("../controllers/ProductControllers/DeleteProductController");
 
 module.exports = (fastify) => {
-	fastify.post("/api/product", async (request, reply) => {
-		try {
-			await addNewProduct(request, reply, fastify);
-		} catch (error) {
-			console.error(error);
-			reply.code(500).send({ message: "Internal Server Error ..." });
-		}
+	fastify.post("/api/product", (request, reply) => {
+		addNewProduct(request, reply, fastify);
 	});
 	fastify.get("/api/product/:id", async (request, reply) => {
-		try {
-			await viewProduct(request, reply, fastify);
-		} catch (error) {
-			console.error(error);
-			reply.code(500).send({ message: "Internal Server Error ..." });
-		}
+		viewProduct(request, reply, fastify);
 	});
 	fastify.put("/api/product/:id", async (request, reply) => {
-		try {
-			await editProduct(request, reply, fastify);
-		} catch (error) {
-			console.error(error);
-			reply.code(500).send({ message: "Internal Server Error ..." });
-		}
+		editProduct(request, reply, fastify);
 	});
 	fastify.delete("/api/product/:id", async (request, reply) => {
-		try {
-			await deleteProduct(request, reply, fastify);
-		} catch (error) {
-			console.error(error);
-			reply.code(500).send({ message: "Internal Server Error ..." });
-		}
+		deleteProduct(request, reply, fastify);
 	});
 };

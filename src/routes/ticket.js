@@ -3,7 +3,7 @@ const {
 	viewTicket,
 	editTicket,
 	deleteTicket,
-} = require("../controllers/TicketController");
+} = require("../controllers/TicketControllers/TicketController");
 
 module.exports = (fastify) => {
 	fastify.post("/api/ticket", async (request, reply) => {

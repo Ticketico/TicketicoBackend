@@ -19,11 +19,11 @@ function getDate() {
 }
 
 function getSignupQueryString() {
-	return "INSERT INTO users (username,password,created_at) VALUES ($1,$2,$3)";
+	return "INSERT INTO users (username,password,created_at,role) VALUES ($1,$2,$3,$4)";
 }
 
 function getSignupQueryStringParams(username, password) {
-	return [username, hashPassword(password), getDate()];
+	return [username, hashPassword(password), getDate(), "user"];
 }
 
 function checkUserExistance(error, reply) {
@@ -49,15 +49,15 @@ function checkPasswordsMatch(password, confirmPassword, reply) {
 	if (password !== confirmPassword) reply.code(400).send({ message: "PAICDM" });
 }
 
-function checkEnoughFields(username, password, confirmPassword) {
+function checkEnoughFields(username, password, confirmPassword, reply) {
 	if (!(username && password && confirmPassword))
 		reply.code(400).send({ message: "NEF" });
 }
 
 function doAllPasswordValidations(username, password, confirmPassword, reply) {
 	checkEnoughFields(username, password, confirmPassword, reply);
-	checkPasswordsMatch(password, confirmPassword, reply);
 	checkStrengthOfPassword(password, reply);
+	checkPasswordsMatch(password, confirmPassword, reply);
 }
 
 function addUserToDB(fastify, username, password, reply) {
@@ -70,6 +70,7 @@ function addUserToDB(fastify, username, password, reply) {
 			sendSuccessMessage(reply);
 		})
 		.catch((error) => {
+			console.log(error);
 			checkUserExistance(error, reply);
 			sendDefaultInternalServerError(reply);
 		});
