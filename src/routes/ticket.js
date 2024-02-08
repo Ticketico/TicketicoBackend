@@ -1,4 +1,9 @@
-const { addNewTicket, viewTicket, editTicket, deleteTicket } = require("../controllers/TicketController");
+const {
+	addNewTicket,
+	viewTicket,
+	editTicket,
+	deleteTicket,
+} = require("../controllers/TicketController");
 
 module.exports = (fastify) => {
 	fastify.post("/api/ticket", async (request, reply) => {
@@ -17,7 +22,7 @@ module.exports = (fastify) => {
 			reply.code(500).send({ message: "Internal Server Error ..." });
 		}
 	});
-    fastify.delete("/api/ticket/:id", async (request, reply) => {
+	fastify.delete("/api/ticket/:id", async (request, reply) => {
 		try {
 			await deleteTicket(request, reply, fastify);
 		} catch (error) {
@@ -25,7 +30,7 @@ module.exports = (fastify) => {
 			reply.code(500).send({ message: "Internal Server Error ..." });
 		}
 	});
-    fastify.get("/api/ticket/:id", async (request, reply) => {
+	fastify.get("/api/ticket/:id", async (request, reply) => {
 		try {
 			await viewTicket(request, reply, fastify);
 		} catch (error) {

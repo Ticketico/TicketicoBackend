@@ -1,7 +1,7 @@
 const addNewTicket = async (request, reply, fastify) => {
 	const { title, description, deadline, submitter_id } = request.body;
 
-	if (!title) return reply.code(400).send({ message: "EF" });
+	if (!title) return reply.code(400).send({ message: "NEF" });
 
 	const date = new Date().toISOString();
 	const addNewTicketQueryString =
