@@ -5,18 +5,7 @@ const HandleSignup = async (request, reply, fastify) => {
 
 	doAllPasswordValidations(username, password, confirmPassword, reply);
 
-	fastify.pg
-		.query(
-			getSignupQueryString(),
-			getSignupQueryStringParams(username, password)
-		)
-		.then(() => {
-			sendSuccessMessage(reply);
-		})
-		.catch((error) => {
-			checkUserExistance(error, reply);
-			sendDefaultInternalServerError(reply);
-		});
+	addUserToDB(fastify, username, password, reply);
 };
 
 module.exports = HandleSignup;
@@ -69,4 +58,19 @@ function doAllPasswordValidations(username, password, confirmPassword, reply) {
 	checkEnoughFields(username, password, confirmPassword, reply);
 	checkPasswordsMatch(password, confirmPassword, reply);
 	checkStrengthOfPassword(password, reply);
+}
+
+function addUserToDB(fastify, username, password, reply) {
+	fastify.pg
+		.query(
+			getSignupQueryString(),
+			getSignupQueryStringParams(username, password)
+		)
+		.then(() => {
+			sendSuccessMessage(reply);
+		})
+		.catch((error) => {
+			checkUserExistance(error, reply);
+			sendDefaultInternalServerError(reply);
+		});
 }
