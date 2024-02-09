@@ -6,36 +6,16 @@ const {
 } = require("../controllers/TicketControllers/TicketController");
 
 module.exports = (fastify) => {
-	fastify.post("/api/ticket", async (request, reply) => {
-		try {
-			await addNewTicket(request, reply, fastify);
-		} catch (error) {
-			console.error(error);
-			reply.code(500).send({ message: "Internal Server Error ..." });
-		}
+	fastify.post("/api/ticket", (request, reply) => {
+		addNewTicket(request, reply, fastify);
 	});
-	fastify.put("/api/ticket/:id", async (request, reply) => {
-		try {
-			await editTicket(request, reply, fastify);
-		} catch (error) {
-			console.error(error);
-			reply.code(500).send({ message: "Internal Server Error ..." });
-		}
+	fastify.put("/api/ticket/:id", (request, reply) => {
+		editTicket(request, reply, fastify);
 	});
-	fastify.delete("/api/ticket/:id", async (request, reply) => {
-		try {
-			await deleteTicket(request, reply, fastify);
-		} catch (error) {
-			console.error(error);
-			reply.code(500).send({ message: "Internal Server Error ..." });
-		}
+	fastify.delete("/api/ticket/:id", (request, reply) => {
+		deleteTicket(request, reply, fastify);
 	});
-	fastify.get("/api/ticket/:id", async (request, reply) => {
-		try {
-			await viewTicket(request, reply, fastify);
-		} catch (error) {
-			console.error(error);
-			reply.code(500).send({ message: "Internal Server Error ..." });
-		}
+	fastify.get("/api/ticket/:id", (request, reply) => {
+		viewTicket(request, reply, fastify);
 	});
 };

@@ -1,9 +1,9 @@
 const addNewProduct = async (request, reply, fastify) => {
-	const { title, description, picture, admin_id } = request.body;
+	const { title, description, admin_id } = request.body;
 
 	checkEnoughFields(title, reply);
 
-	addNewProductToDB(title, description, picture, admin_id, fastify, reply);
+	addNewProductToDB(title, description, admin_id, fastify, reply);
 };
 
 module.exports = addNewProduct;
@@ -12,21 +12,19 @@ function checkEnoughFields(title, reply) {
 	if (!title) reply.code(400).send({ message: "NEF" });
 }
 function getAddNewProductQueryString() {
-	return "INSERT INTO products (title,description,picture,admin_id,created_at) VALUES ($1,$2,$3,$4,$5)";
+	return "INSERT INTO products (title,description,admin_id,created_at) VALUES ($1,$2,$3,$4)";
 }
 function getAddNewProductQueryStringParams(
 	title,
 	description,
-	picture,
 	admin_id
 ) {
-	return [title, description, picture, admin_id, new Date().toISOString()];
+	return [title, description, admin_id, new Date().toISOString()];
 }
 
 function addNewProductToDB(
 	title,
 	description,
-	picture,
 	admin_id,
 	fastify,
 	reply
@@ -34,7 +32,7 @@ function addNewProductToDB(
 	fastify.pg
 		.query(
 			getAddNewProductQueryString(),
-			getAddNewProductQueryStringParams(title, description, picture, admin_id)
+			getAddNewProductQueryStringParams(title, description, admin_id)
 		)
 		.then(() => {
 			sendSuccessfulMessage(reply);

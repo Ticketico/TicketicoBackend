@@ -6,7 +6,6 @@ const editUser = async (request, reply, fastify) => {
 		oldPassword: enteredOldPassword,
 		newPassword,
 		newPasswordConfirmation,
-		picture,
 	} = request.body;
 
 	if (newPassword !== newPasswordConfirmation)
@@ -24,8 +23,8 @@ const editUser = async (request, reply, fastify) => {
 	const hashedPassword = await bcrypt.hash(newPassword, 10);
 
 	const updateUserQueryString =
-		"UPDATE users SET password=$1, picture=$2 WHERE id=$3";
-	await fastify.pg.query(updateUserQueryString, [hashedPassword, picture, id]);
+		"UPDATE users SET password=$1 WHERE id=$3";
+	await fastify.pg.query(updateUserQueryString, [hashedPassword, id]);
 	reply.send({ message: "UES" });
 };
 

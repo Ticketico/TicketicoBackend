@@ -7,13 +7,13 @@ module.exports = (fastify) => {
 	fastify.post("/api/product", (request, reply) => {
 		addNewProduct(request, reply, fastify);
 	});
-	fastify.get("/api/product/:id", async (request, reply) => {
+	fastify.get("/api/product/:id", (request, reply) => {
 		viewProduct(request, reply, fastify);
 	});
-	fastify.put("/api/product/:id", async (request, reply) => {
+	fastify.put("/api/product/:id", (request, reply) => {
 		editProduct(request, reply, fastify);
 	});
-	fastify.delete("/api/product/:id", async (request, reply) => {
+	fastify.delete("/api/product/:id", (request, reply) => {
 		deleteProduct(request, reply, fastify);
 	});
 };
