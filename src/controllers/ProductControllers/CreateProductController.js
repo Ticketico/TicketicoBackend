@@ -1,7 +1,7 @@
 const addNewProduct = async (request, reply, fastify) => {
 	const { title, description, admin_id } = request.body;
 
-	if (checkEnoughFields(title)) return reply.code(400).send({ message: "NEF" });
+	if (!checkEnoughFields(title)) return reply.code(400).send({ message: "NEF" });
 
 	fastify.pg
 		.query(

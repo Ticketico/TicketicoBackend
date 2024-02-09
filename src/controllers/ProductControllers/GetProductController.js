@@ -7,7 +7,7 @@ const viewProduct = async (request, reply, fastify) => {
 			getViewProductQueryStringParams(productId)
 		)
 		.then((result) => {
-			const tailoredProductData = tailorProductData(reply, result.rows[0]);
+			const tailoredProductData = tailorProductData(result.rows[0]);
 			return reply.send({ message: tailoredProductData });
 		})
 		.catch(() => {

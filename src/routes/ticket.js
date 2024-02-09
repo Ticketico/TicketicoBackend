@@ -1,9 +1,7 @@
-const {
-	addNewTicket,
-	viewTicket,
-	editTicket,
-	deleteTicket,
-} = require("../controllers/TicketControllers/TicketController");
+const deleteTicket = require("../controllers/TicketControllers/DeleteTicketController");
+const addNewTicket = require("../controllers/TicketControllers/CreateTicketController");
+const editTicket = require("../controllers/TicketControllers/EditTicketController");
+const viewTicket = require("../controllers/TicketControllers/GetTicketController");
 
 module.exports = (fastify) => {
 	fastify.post("/api/ticket", (request, reply) => {
