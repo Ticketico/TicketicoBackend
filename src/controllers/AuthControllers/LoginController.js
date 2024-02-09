@@ -4,6 +4,7 @@ const HandleLogin = async (request, reply, fastify) => {
 	const { username, password } = request.body;
 
 	checkEnoughFields(username, password, reply);
+	
 	doLoginProcessWithDB(username, password, fastify, reply);
 };
 

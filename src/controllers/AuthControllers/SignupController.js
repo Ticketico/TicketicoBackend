@@ -35,10 +35,6 @@ function sendDefaultInternalServerError(reply) {
 	reply.code(500).send({ message: "ISE" });
 }
 
-function sendSuccessMessage(reply) {
-	reply.send({ message: "SS" });
-}
-
 function checkStrengthOfPassword(password, reply) {
 	const regex =
 		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
@@ -67,11 +63,13 @@ function addUserToDB(fastify, username, password, reply) {
 			getSignupQueryStringParams(username, password)
 		)
 		.then(() => {
-			sendSuccessMessage(reply);
+			sendSuccessfulMessage(reply);
 		})
 		.catch((error) => {
-			console.log(error);
 			checkUserExistance(error, reply);
 			sendDefaultInternalServerError(reply);
 		});
+}
+function sendSuccessfulMessage(reply) {
+	reply.send({ message: "SS" });
 }
