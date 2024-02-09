@@ -3,9 +3,26 @@ const bcrypt = require("bcrypt");
 const HandleSignup = async (request, reply, fastify) => {
 	const { username, password, confirmPassword } = request.body;
 
-	doAllPasswordValidations(username, password, confirmPassword, reply);
+	if (!checkEnoughFields(username, password, confirmPassword))
+		return reply.code(400).send({ message: "NEF" });
+	if (!checkStrengthOfPassword(password))
+		return reply.code(400).send({ message: "PAIW" });
+	if (!checkPasswordsMatch(password, confirmPassword))
+		return reply.code(400).send({ message: "PAICDM" });
 
-	addUserToDB(fastify, username, password, reply);
+	fastify.pg
+		.query(
+			getSignupQueryString(),
+			getSignupQueryStringParams(username, password)
+		)
+		.then(() => {
+			return reply.send({ message: "SS" });
+		})
+		.catch((error) => {
+			if (checkUserExistance(error))
+				return reply.code(400).send({ message: "UAE" });
+			return reply.code(500).send({ message: "ISE" });
+		});
 };
 
 module.exports = HandleSignup;
@@ -26,50 +43,20 @@ function getSignupQueryStringParams(username, password) {
 	return [username, hashPassword(password), getDate(), "user"];
 }
 
-function checkUserExistance(error, reply) {
-	if (error.detail.includes("already exists"))
-		reply.code(400).send({ message: "UAE" });
+function checkUserExistance(error) {
+	return error.detail.includes("already exists");
 }
 
-function sendDefaultInternalServerError(reply) {
-	reply.code(500).send({ message: "ISE" });
-}
-
-function checkStrengthOfPassword(password, reply) {
+function checkStrengthOfPassword(password) {
 	const regex =
 		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
-	if (!regex.test(password)) reply.code(400).send({ message: "PAIW" });
+	return regex.test(password);
 }
 
-function checkPasswordsMatch(password, confirmPassword, reply) {
-	if (password !== confirmPassword) reply.code(400).send({ message: "PAICDM" });
+function checkPasswordsMatch(password, confirmPassword) {
+	return password === confirmPassword;
 }
 
-function checkEnoughFields(username, password, confirmPassword, reply) {
-	if (!(username && password && confirmPassword))
-		reply.code(400).send({ message: "NEF" });
-}
-
-function doAllPasswordValidations(username, password, confirmPassword, reply) {
-	checkEnoughFields(username, password, confirmPassword, reply);
-	checkStrengthOfPassword(password, reply);
-	checkPasswordsMatch(password, confirmPassword, reply);
-}
-
-function addUserToDB(fastify, username, password, reply) {
-	fastify.pg
-		.query(
-			getSignupQueryString(),
-			getSignupQueryStringParams(username, password)
-		)
-		.then(() => {
-			sendSuccessfulMessage(reply);
-		})
-		.catch((error) => {
-			checkUserExistance(error, reply);
-			sendDefaultInternalServerError(reply);
-		});
-}
-function sendSuccessfulMessage(reply) {
-	reply.send({ message: "SS" });
+function checkEnoughFields(username, password, confirmPassword) {
+	return username && password && confirmPassword;
 }

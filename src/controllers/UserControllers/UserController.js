@@ -22,8 +22,7 @@ const editUser = async (request, reply, fastify) => {
 	if (!doPasswordsMatch) return reply.code(400).send({ messgae: "WP" });
 	const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-	const updateUserQueryString =
-		"UPDATE users SET password=$1 WHERE id=$3";
+	const updateUserQueryString = "UPDATE users SET password=$1 WHERE id=$3";
 	await fastify.pg.query(updateUserQueryString, [hashedPassword, id]);
 	reply.send({ message: "UES" });
 };
