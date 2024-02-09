@@ -36,8 +36,12 @@ function addNewProductToDB(
 			getAddNewProductQueryString(),
 			getAddNewProductQueryStringParams(title, description, picture, admin_id)
 		)
-		.then(() => sendSuccessfulMessage(reply))
-		.catch(() => sendErrorMessage(reply));
+		.then(() => {
+			sendSuccessfulMessage(reply);
+		})
+		.catch(() => {
+			sendErrorMessage(reply);
+		});
 }
 function sendSuccessfulMessage(reply) {
 	reply.send({ message: "PAS" });

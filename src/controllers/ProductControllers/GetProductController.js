@@ -1,17 +1,7 @@
 const viewProduct = async (request, reply, fastify) => {
 	const productId = request.params.id;
 
-	fastify.pg
-		.query(
-			getViewProductQueryString(),
-			getViewProductQueryStringParams(productId)
-		)
-		.then((result) => {
-			sendProductData(reply, result.rows[0]);
-		})
-		.catch(() => {
-			sendDefaultError(reply);
-		});
+	sendProductDataFromDB(productId, fastify, reply);
 };
 
 module.exports = viewProduct;
@@ -27,7 +17,20 @@ function sendDefaultError(reply) {
 }
 function sendProductData(reply, productObjectFromDB) {
 	delete productObjectFromDB.deleted_at;
-	delete productObjectFromDB.created_at;
 	delete productObjectFromDB.admin_id;
 	reply.send({ message: productObjectFromDB });
+}
+
+function sendProductDataFromDB(productId, fastify, reply) {
+	fastify.pg
+		.query(
+			getViewProductQueryString(),
+			getViewProductQueryStringParams(productId)
+		)
+		.then((result) => {
+			sendProductData(reply, result.rows[0]);
+		})
+		.catch(() => {
+			sendDefaultError(reply);
+		});
 }
