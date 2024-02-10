@@ -1,6 +1,6 @@
 const addNewProduct = require("../controllers/ProductControllers/CreateProductController");
 const viewProduct = require("../controllers/ProductControllers/GetProductController");
-const editProduct = require("../controllers/ProductControllers/editProductController");
+const editProduct = require("../controllers/ProductControllers/EditProductController");
 const deleteProduct = require("../controllers/ProductControllers/DeleteProductController");
 
 module.exports = (fastify) => {
